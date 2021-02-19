@@ -3,8 +3,18 @@
     android:layout_width="match_parent" android:layout_height="match_parent">
 <TextView
     android:id="@+id/class_name"
-    android:layout_width="match_parent"
+    android:layout_width="100dp"
     android:layout_height="50dp"/>
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/spinner"
+        android:layout_toRightOf="@+id/class_name"
+        android:layout_width="80dp"
+        android:layout_height="70dp"/>
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/spinner_txt"
+        android:layout_toRightOf="@+id/spinner"
+        android:layout_width="80dp"
+        android:layout_height="70dp"/>
     <ImageButton
         android:id="@+id/addl"
         android:layout_width="50dp"

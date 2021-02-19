@@ -19,6 +19,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dash.quiz.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
@@ -259,16 +264,54 @@ public class Student extends AppCompatActivity {
         c.add("social");
         c.add("fdsfdsf");
         ArrayList<MyData> data=new ArrayList<>();
+        set_data(new List_data() {
+            @Override
+            public void getted_data(ArrayList<String> datas) {
+                for(int i=0;i < c.size();i++){
+                    data.add(new MyData(datas.get(i)));
+                }
 
-        for(int i=0;i < c.size();i++){
-            data.add(new MyData(c.get(i)));
-        }
+                adapter=new recycler_adaptor(data);
+                recyclerView.setAdapter(adapter);
+            }
+        });
 
-        adapter=new recycler_adaptor(data);
-        recyclerView.setAdapter(adapter);
+
 
 
     }
+    public void set_data(List_data list){
+        ArrayList<String> title=new ArrayList<>();
+        DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference(name);
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot){
+                for (DataSnapshot child: snapshot.getChildren()) {
+                    if(child.hasChildren()){
+                        title.add(child.getKey());
+                        System.out.println(child.getKey());
+
+                    }
+                }
+                String[] list_data=new String[title.size()];
+                list_data=title.toArray(list_data);
+
+                list.getted_data(title);
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+    }
+    interface List_data{
+        void getted_data(ArrayList<String> data);
+    }
+
 
 
 
