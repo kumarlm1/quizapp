@@ -8,6 +8,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -43,6 +46,7 @@ public class Login extends Fragment {
     RadioButton radioButton;
     ProgressBar progressBar;
     FirebaseFirestore db=FirebaseFirestore.getInstance();
+    WebView wb;
 
     @Nullable
     @Override
@@ -55,6 +59,12 @@ public class Login extends Fragment {
         create=root.findViewById(R.id.create_account);
         progressBar=root.findViewById(R.id.progress_login);
         progressBar.setVisibility(View.INVISIBLE);
+        wb=root.findViewById(R.id.webview);
+        wb.getSettings().setJavaScriptEnabled(true);
+        wb.setWebViewClient(new Myclass());
+        wb.loadUrl("https://console.dialogflow.com/api-client/demo/embedded/570ad605-c0f0-4705-b8fc-3a5e273756cc");
+
+
 
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(false)
@@ -88,6 +98,28 @@ public class Login extends Fragment {
 
         return root;
     }
+
+    public class Myclass extends WebViewClient{
+
+        @Override
+        public void onLoadResource(WebView view, String url) {
+            wb.loadUrl("javascript:if (typeof(document.getElementsByClassName('b-agent-demo_powered_by')[0]) != 'undefined' && document.getElementsByClassName('b-agent-demo_powered_by')[0] != null){document.getElementsByClassName('b-agent-demo_powered_by')[0].style.display = 'none';} void 0");
+
+            wb.loadUrl("javascript:if (typeof(document.getElementsByClassName('b-agent-demo_header')[0]) != 'undefined' && document.getElementsByClassName('b-agent-demo_header')[0] != null){document.getElementsByClassName('b-agent-demo_header')[0].style.display = 'none';} void 0");
+            super.onLoadResource(view, url);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
     private void call_methods(String bran,String username,String password)
     { if(check_branch()) {
         int id=radioGroup.getCheckedRadioButtonId();
